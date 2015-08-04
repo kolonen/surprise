@@ -1,20 +1,22 @@
 
 class event(object):
     def __init__(self, 
-                 event_id=None, 
+                 event_id=None,
                  wager_id=None, 
+                 row_id=None,
                  insert_date=None, 
                  author=None, 
                  choose_home=False, 
                  choose_tie=False, 
                  choose_away=False,
-                 home_team=None
-                 away_team=None
-                 away_score=0
+                 home_team=None,
+                 away_team=None,
+                 away_score=0,
                  home_score=0):
         
         self.event_id = event_id
         self.wager_id = wager_id
+        self.row_id = row_id
         self.insert_date = insert_date
         self.author = author
         self.choose_home = choose_home 
@@ -33,4 +35,13 @@ class wager(object):
                  manager=None,
                  system_size=1,
                  bet=None,
-                 events=None)
+                 events=None):
+        
+        self.wager_id = wager_id
+        self.ext_id = ext_id
+        self.wager_date = wager_date
+        self.manager = manager
+        self.system_size = system_size
+        self.bet = bet
+        self.events = events
+        
