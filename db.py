@@ -1,12 +1,12 @@
 import MySQLdb
 from datetime import datetime
 
-class Database:
+class db:
 
     host = 'localhost'
     user = 'root'
     password = ''
-    db = 'surprisedb'
+    db = 'surprise'
 
     def __init__(self):
         self.connection = MySQLdb.connect(self.host, self.user, self.password, self.db)
@@ -30,7 +30,7 @@ class Database:
     def __del__(self):
         self.connection.close()
         
-    def insertWager(self, wager):
+    def save_wager(self, wager):
         query = "INSERT INTO wager (wager_date, manager, system_size, bet) VALUES (%s, %s, %s, %s)"
         data_wager = (wager.wager_date, wager.manager, wager.system_size, wager.bet)
         # insert wager, get last row id
