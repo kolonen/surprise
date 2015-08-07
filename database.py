@@ -1,7 +1,7 @@
 import MySQLdb
 from datetime import datetime
 
-class db:
+class database:
 
     host = 'localhost'
     user = 'root'

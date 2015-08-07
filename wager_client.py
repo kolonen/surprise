@@ -4,7 +4,7 @@ import sys
 import surprise
 import time
 import MySQLdb
-from mysql_service import Database
+from database import database
 from surprise import wager
 from datetime import datetime
 
@@ -73,8 +73,8 @@ def get_wagers(session, txs):
 
 
 def store_wager(wager):
-    db = Database()
-    db.insertWager(wager)
+    db = database()
+    db.save_wager(wager)
     
 if __name__ == "__main__":    
     s = login(sys.argv[1], sys.argv[2])
@@ -87,8 +87,4 @@ if __name__ == "__main__":
     # test wager insert
     new_wager = wager(wager_date = datetime.now(), manager = "Mixu Paatelainen", bet = 16)
     store_wager(new_wager)
-
-    
-    
-
 
