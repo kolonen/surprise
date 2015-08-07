@@ -3,6 +3,10 @@ import json
 import sys
 import surprise
 import time
+import MySQLdb
+from mysql_service import Database
+from surprise import wager
+from datetime import datetime
 
 headers = {
     'Content-type':'application/json',
@@ -27,7 +31,9 @@ def get_tx_ids(session):
 def get_wagers(session, txs):
     
     def get_wager(session, tx_id):
-        r = session.get('https://www.veikkaus.fi/api/v1/sport-games/wagers/'+tx_id, headers=headers) 
+        r = session.get('https://www.veikkaus.fi/api/v1/sport-games/wagers/'+tx_id, headers=headers)
+        print json.loads(r.text)
+        print "--------------------------"
         return json.loads(r.text)
 
     def parse_selection(s):
@@ -62,14 +68,14 @@ def get_wagers(session, txs):
                  ), selections)
     
     #parse wager high level data, create wager
-    wager = surprise.wager(events=events) 
-    
+    wager = surprise.wager(events=events)
     return wager
 
 
-def store_wager():
-    print ''
-
+def store_wager(wager):
+    db = Database()
+    db.insertWager(wager)
+    
 if __name__ == "__main__":    
     s = login(sys.argv[1], sys.argv[2])
     tx_ids = get_tx_ids(s)
@@ -77,6 +83,10 @@ if __name__ == "__main__":
     for e in w.events:
         print e.row_id,e.home_team,e.home_score, e.away_team, e.away_score
         print e.choose_home, e.choose_tie, e.choose_away
+    
+    # test wager insert
+    new_wager = wager(wager_date = datetime.now(), manager = "Mixu Paatelainen", bet = 16)
+    store_wager(new_wager)
 
     
     
