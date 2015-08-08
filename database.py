@@ -1,4 +1,5 @@
 import MySQLdb
+import sys
 from datetime import datetime
 
 class database:
@@ -14,9 +15,10 @@ class database:
 
     def __insert(self, query, data):
         try:
-            self.cursor.execute(query, data)
-            self.connection.commit()
+        self.cursor.execute(query, data)
+        self.connection.commit()
         except:
+            print sys.exc_info()[0]
             self.connection.rollback()
         return self.cursor.lastrowid
 
@@ -24,7 +26,6 @@ class database:
     def __query(self, query):
         cursor = self.connection.cursor( MySQLdb.cursors.DictCursor )
         cursor.execute(query)
-
         return cursor.fetchall()
 
     def __del__(self):
@@ -32,8 +33,16 @@ class database:
         
     def save_wager(self, wager):
         query = "INSERT INTO wager (wager_date, manager, system_size, bet) VALUES (%s, %s, %s, %s)"
-        data_wager = (wager.wager_date, wager.manager, wager.system_size, wager.bet)
         # insert wager, get last row id
-        id = self.__insert(query, data_wager)
+        id = self.__insert(query, (wager.wager_date, wager.manager, wager.system_size, wager.bet))
         print id
-        # todo: insert events
+        query = "INSERT INTO event(wager_id, choose_home, choose_tie, choose_away, home_team, away_team, away_score, home_score) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+        
+        for e in wager.events:
+            print e
+            self.__insert(query, (id, e.choose_home, 
+                                  e.choose_tie, e.choose_away, 
+                                  e.home_team, e.away_team,
+                                  e.away_score, e.home_score))
+        
+        
