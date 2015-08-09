@@ -32,7 +32,8 @@ class database:
         
     def save_wager(self, wager):
         query = "INSERT INTO wager (wager_date, manager, system_size, bet) VALUES (%s, %s, %s, %s)"
-        data_wager = (wager.wager_date, wager.manager, wager.system_size, wager.bet)
+        print wager.wager_date
+        data_wager = (wager.wager_date, wager.manager, wager.system_size, wager.stake)
         # insert wager, get last row id
         id = self.__insert(query, data_wager)
         print id

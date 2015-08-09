@@ -34,7 +34,8 @@ class wager(object):
                  wager_date=None,
                  manager=None,
                  system_size=1,
-                 bet=None,
+                 stake=None,
+                 win_amount=None,
                  events=None):
         
         self.wager_id = wager_id
@@ -42,6 +43,7 @@ class wager(object):
         self.wager_date = wager_date
         self.manager = manager
         self.system_size = system_size
-        self.bet = bet
+        self.stake = stake
+        self.win_amount = win_amount
         self.events = events
         
