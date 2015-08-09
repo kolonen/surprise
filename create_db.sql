@@ -3,10 +3,12 @@ DROP TABLE IF EXISTS wager;
 
 CREATE TABLE wager(
   wager_id INT NOT NULL AUTO_INCREMENT,
+  external_id VARCHAR(32),
   wager_date DATETIME,
   manager VARCHAR(32),
   system_size INT,
-  bet INT,
+  stake INT,
+  win_amount INT,
   PRIMARY KEY (wager_id)         
 );
 
