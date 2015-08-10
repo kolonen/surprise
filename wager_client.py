@@ -95,3 +95,5 @@ if __name__ == "__main__":
     db = database()
     for w in wagers:
         db.save_wager(w)
+    # test get wagers for Mixu
+    db.get_wagers("Mixu Paatelainen")
