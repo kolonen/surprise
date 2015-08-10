@@ -23,9 +23,9 @@ class database:
         return self.cursor.lastrowid
 
 
-    def __query(self, query):
+    def __query(self, query, data):
         cursor = self.connection.cursor( MySQLdb.cursors.DictCursor )
-        cursor.execute(query)
+        cursor.execute(query, [data])
         return cursor.fetchall()
 
     def __del__(self):
@@ -45,4 +45,11 @@ class database:
                                   e.home_team, e.away_team,
                                   e.away_score, e.home_score))
         
-     
+    def get_wagers(self, manager):
+        query = "SELECT wager_id, external_id, wager_date, manager, system_size, stake, win_amount FROM wager WHERE manager = %s"
+        rows = self.__query(query, manager)
+        for row in rows:
+            print row
+            print "-----------"
+        # TODO: parse data to wager objects and put them to map.
+        # Also events per wager should be fetched 
