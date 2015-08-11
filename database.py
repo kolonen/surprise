@@ -1,5 +1,6 @@
 import MySQLdb
 import sys
+import surprise
 from datetime import datetime
 
 class database:
@@ -46,10 +47,15 @@ class database:
                                   e.away_score, e.home_score))
         
     def get_wagers(self, manager):
+        def parse_wager(row):
+            return surprise.wager(wager_date=row['wager_date'], 
+                      ext_id=row['external_id'],
+                      stake=row['stake'], 
+                      system_size=row['system_size'],
+                      manager = row['manager'],
+                      win_amount = row['win_amount'])
+    
         query = "SELECT wager_id, external_id, wager_date, manager, system_size, stake, win_amount FROM wager WHERE manager = %s"
         rows = self.__query(query, manager)
-        for row in rows:
-            print row
-            print "-----------"
-        # TODO: parse data to wager objects and put them to map.
-        # Also events per wager should be fetched 
+        wagers = map(lambda x: parse_wager(x), rows)
+        # todo: Add wager events
