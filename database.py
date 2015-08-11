@@ -48,14 +48,20 @@ class database:
         
     def get_wagers(self, manager):
         def parse_wager(row):
-            return surprise.wager(wager_date=row['wager_date'], 
-                      ext_id=row['external_id'],
-                      stake=row['stake'], 
-                      system_size=row['system_size'],
-                      manager = row['manager'],
-                      win_amount = row['win_amount'])
+            # get events
+            row['events'] = self.get_events(row['wager_id'])
+            return surprise.wager(wager_id=row['wager_id'],
+                  wager_date=row['wager_date'], 
+                  ext_id=row['external_id'],
+                  stake=row['stake'], 
+                  system_size=row['system_size'],
+                  manager = row['manager'],
+                  win_amount = row['win_amount'],
+                  events = row['events'])
     
         query = "SELECT wager_id, external_id, wager_date, manager, system_size, stake, win_amount FROM wager WHERE manager = %s"
         rows = self.__query(query, manager)
         wagers = map(lambda x: parse_wager(x), rows)
-        # todo: Add wager events
+
+    def get_events(self, wager_id):
+        return self.__query("SELECT wager_id, choose_home, choose_tie, choose_away, home_team, away_team, away_score, home_score FROM event WHERE wager_id = %s", wager_id)
