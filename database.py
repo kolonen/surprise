@@ -1,5 +1,6 @@
 import MySQLdb
 import sys
+import surprise
 from datetime import datetime
 
 class database:
@@ -23,9 +24,9 @@ class database:
         return self.cursor.lastrowid
 
 
-    def __query(self, query):
+    def __query(self, query, data):
         cursor = self.connection.cursor( MySQLdb.cursors.DictCursor )
-        cursor.execute(query)
+        cursor.execute(query, [data])
         return cursor.fetchall()
 
     def __del__(self):
@@ -45,4 +46,16 @@ class database:
                                   e.home_team, e.away_team,
                                   e.away_score, e.home_score))
         
-     
+    def get_wagers(self, manager):
+        def parse_wager(row):
+            return surprise.wager(wager_date=row['wager_date'], 
+                      ext_id=row['external_id'],
+                      stake=row['stake'], 
+                      system_size=row['system_size'],
+                      manager = row['manager'],
+                      win_amount = row['win_amount'])
+    
+        query = "SELECT wager_id, external_id, wager_date, manager, system_size, stake, win_amount FROM wager WHERE manager = %s"
+        rows = self.__query(query, manager)
+        wagers = map(lambda x: parse_wager(x), rows)
+        # todo: Add wager events
