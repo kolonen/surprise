@@ -76,8 +76,7 @@ def parse_wager(w):
     stake = w['wager']['stake']
     system_size = w['wager']['systemLevel']
     win_amount = w['winning']['amount']
-    print wager_date
-    
+        
     return surprise.wager(wager_date=wager_date, 
                           ext_id=external_id,
                           stake=stake, 
@@ -94,5 +93,10 @@ if __name__ == "__main__":
     db = database()
     for w in wagers:
         db.save_wager(w)
-    # test get wagers for Mixu
-    db.get_wagers("Mixu Paatelainen")
+    
+    w = db.get_wagers("Mixu Paatelainen")[0]
+    print w.wager_id
+    print w.wager_date
+    for e in w.events:
+        print e.home_team, e.away_team, e.home_score, e.away_score
+    
