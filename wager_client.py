@@ -3,7 +3,6 @@ import json
 import sys
 import surprise
 import time
-import MySQLdb
 from database import database
 from surprise import wager
 from datetime import datetime
