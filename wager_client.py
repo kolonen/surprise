@@ -22,12 +22,16 @@ def login (username, password):
     else:
         raise Exception("Authentication failed", r.status_code)    
 
-def get_tx_ids(session):
-    r = session.get('https://www.veikkaus.fi/api/v1/players/self/account/transactions?size=10&sort-by=RESULT_DATE', headers=headers)
+def get_wagers(session, count=10):
+    tx_ids = get_tx_ids(session, count)
+    return get_wagers_by_txs(session,tx_ids)
+
+def get_tx_ids(session, count):
+    r = session.get('https://www.veikkaus.fi/api/v1/players/self/account/transactions?size='+str(count)+'&sort-by=RESULT_DATE', headers=headers)
     txs = r.json()['transactions']
     return map(lambda x: x['externalId'], txs)
     
-def get_wagers(session, txs):
+def get_wagers_by_txs(session, txs):
     wagers = map(lambda x: get_wager(session,x), txs)
     wagers = filter(lambda x: 'draw' in x and x['draw']['gameName'] == 'SPORT', wagers)
     wagers = map(lambda w: parse_wager(w),wagers)
@@ -45,7 +49,6 @@ def parse_wager(w):
             'tie': (True if 'tie' in s else False),
             'away': (True if 'away' in s else False) 
         }
-    
     def parse_datetime(t):
         return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(t/1000))
     
@@ -86,17 +89,4 @@ def parse_wager(w):
                           events=events)
     
 
-if __name__ == "__main__":    
-    s = login(sys.argv[1], sys.argv[2])
-    tx_ids = get_tx_ids(s)
-    wagers = get_wagers(s,tx_ids)
-    db = database()
-    for w in wagers:
-        db.save_wager(w)
-    
-    w = db.get_wagers("Mixu Paatelainen")[0]
-    print w.wager_id
-    print w.wager_date
-    for e in w.events:
-        print e.home_team, e.away_team, e.home_score, e.away_score
     
