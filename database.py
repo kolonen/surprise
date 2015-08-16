@@ -58,15 +58,17 @@ class database:
     def get_events(self, wager_id):
         
         def event_from_row(r):
-            return surprise.event(wager_id = r['wager_id'],
+            return surprise.event(event_id = r['event_id'],
+                           wager_id = r['wager_id'],
                            choose_home = r['choose_home'], 
                            choose_tie = r['choose_tie'],
                            choose_away = r['choose_away'],
                            home_team = r['home_team'],
                            away_team = r['away_team'],
                            home_score = r['home_score'],
-                           away_score = r['away_score'])
+                           away_score = r['away_score'],
+                           author = r['author'])
         
-        rows = self.__query("SELECT wager_id, choose_home, choose_tie, choose_away, home_team, away_team, away_score, home_score FROM event WHERE wager_id = %s", wager_id)
+        rows = self.__query("SELECT event_id, wager_id, choose_home, choose_tie, choose_away, home_team, away_team, away_score, home_score, author FROM event WHERE wager_id = %s", wager_id)
         return map(lambda r: event_from_row(r), rows)
         
