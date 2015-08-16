@@ -1,3 +1,5 @@
+import json
+import copy
 
 class event(object):
     def __init__(self, 
@@ -47,3 +49,10 @@ class wager(object):
         self.win_amount = win_amount
         self.events = events
         
+    
+    def to_dict(self):
+        d = copy.deepcopy(self.__dict__)
+        d['wager_date'] = str(self.wager_date )
+        d['events'] = map(lambda x: x.__dict__, d['events'])
+        return d
+    
