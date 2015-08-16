@@ -2,16 +2,13 @@ from flask import Flask
 from flask import Response
 from flask import request
 from database import database
-from surprise import wager
-from surprise import event
 import json
-import simplejson
 
 app = Flask(__name__)
 db = database()
 
 @app.after_request
-def db_disconnect(response):
+def returnresp(response):
     return response
 
 @app.route("/")
@@ -19,7 +16,7 @@ def hello():
     return "Hello World!"
 
 @app.route("/wagers", methods=['GET'])
-def names():
+def wagers():
     def dict_from_wager(w):
         d = {"wager_id" : w.wager_id,
         "ext_id" : w.ext_id,
@@ -43,4 +40,4 @@ def names():
     return resp
         
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
