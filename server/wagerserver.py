@@ -5,20 +5,18 @@ import json
 app = flask.Flask(__name__)
 db = database()
 
-@app.route("/")
-def hello():
-    return "Hello World!"
-
 @app.route("/wagers", methods=['GET'])
 def wagers():
     if 'manager' in flask.request.args:        
-        wagers = db.get_wagers(flask.request.args['manager'])
+        wagers = db.get_manager_wagers(flask.request.args['manager'])
         wagers_json = json.dumps(map(lambda x: x.to_dict(   ), wagers), indent=4)
         return flask.Response(wagers_json, status=200, mimetype='application/json')
     else:
-        message = {'Not Found: ' + flask.request.url}   
-        return flask.Response(message, status=404, mimetype='application/json')
-
+        wagers = db.get_wagers()
+        wagers_json = json.dumps(map(lambda x: x.to_dict(),wagers), indent=4)
+        print wagers_json
+        return flask.Response(wagers_json, status=200, mimetype='application/json')
+        
 @app.route("/events", methods=['POST'])
 def update_events():
     if 'events' in flask.request.json:
