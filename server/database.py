@@ -72,7 +72,7 @@ class database:
                            away_score = r['away_score'],
                            author = r['author'])
         
-        rows = self.__query("SELECT event_id, wager_id, choose_home, choose_tie, choose_away, home_team, away_team, away_score, home_score, author FROM event WHERE wager_id = %s", (wager_id))
+        rows = self.__query("SELECT event_id, wager_id, choose_home, choose_tie, choose_away, home_team, away_team, away_score, home_score, author FROM event WHERE wager_id = %s", [wager_id])
         return map(lambda r: event_from_row(r), rows)
         
     def update_event_author(self, author, event_id):
