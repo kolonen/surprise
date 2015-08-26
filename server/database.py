@@ -25,10 +25,7 @@ class database:
 
     def __query(self, query, data):
         cursor = self.connection.cursor( MySQLdb.cursors.DictCursor )
-        if data is not None:
-            cursor.execute(query, [data])
-        else: 
-            cursor.execute(query)
+        cursor.execute(query, data)
         return cursor.fetchall()
 
     def __del__(self):
@@ -41,7 +38,10 @@ class database:
             self.__insert("INSERT INTO event(wager_id, choose_home, choose_tie, choose_away, home_team, away_team, away_score, home_score) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", 
                           (wager_id, e.choose_home, e.choose_tie, e.choose_away, e.home_team, e.away_team,e.away_score, e.home_score))
         
-    def wager_from_row(self, r):
+
+    def get_wagers(self, **kwargs):
+    
+        def wager_from_row(r):
             return surprise.wager(wager_id = r['wager_id'],
                   wager_date = r['wager_date'], 
                   ext_id = r['external_id'],
@@ -50,17 +50,16 @@ class database:
                   manager = r['manager'],
                   win_amount = r['win_amount'],
                   events = self.get_events(r['wager_id']))
-
-
-    def get_manager_wagers(self, manager):
         
-        rows = self.__query("SELECT wager_id, external_id, wager_date, manager, system_size, stake, win_amount FROM wager WHERE manager = %s", manager)
-        wagers = map(lambda x: self.wager_from_row(x), rows)
-        return wagers
-
-    def get_wagers(self):
-        rows = self.__query("SELECT wager_id, external_id, wager_date, manager, system_size, stake, win_amount FROM wager", None)
-        wagers = map(lambda x: self.wager_from_row(x), rows)
+        query = "SELECT wager_id, external_id, wager_date, manager, system_size, stake, win_amount FROM wager"
+        if 'manager' in kwargs:
+            query += " WHERE manager = %s"
+        if 'size' in kwargs:
+            query += " limit %s"
+            if 'offset' in kwargs:
+                query += " offset %s"
+        rows = self.__query(query, tuple(kwargs.values()))
+        wagers = map(lambda x: wager_from_row(x), rows)
         return wagers
 
     
@@ -78,7 +77,7 @@ class database:
                            away_score = r['away_score'],
                            author = r['author'])
         
-        rows = self.__query("SELECT event_id, wager_id, choose_home, choose_tie, choose_away, home_team, away_team, away_score, home_score, author FROM event WHERE wager_id = %s", wager_id)
+        rows = self.__query("SELECT event_id, wager_id, choose_home, choose_tie, choose_away, home_team, away_team, away_score, home_score, author FROM event WHERE wager_id = %s", (wager_id,))
         return map(lambda r: event_from_row(r), rows)
         
     def update_event_author(self, author, event_id):
