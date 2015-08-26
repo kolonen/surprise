@@ -1,34 +1,21 @@
 import flask
 from database import database
 import json
+from webargs import Arg
+from webargs.flaskparser import use_args
 
 app = flask.Flask(__name__)
 db = database()
 
-@app.route("/")
-def hello():
-    return "Hello World!"
+wager_args = {
+  'limit': Arg(int, default=10000),
+  'offset': Arg(int, default=0)
+}
 
 @app.route("/wagers", methods=['GET'])
-def wagers():
-    params = {}
-    if 'manager' in flask.request.args:
-        params.update({'manager': flask.request.args['manager']})
-    if 'size' in flask.request.args:
-        if flask.request.args['size'].isdigit():
-            params.update({'size': int(flask.request.args['size'])})
-            if 'offset' in flask.request.args:
-                if flask.request.args['offset'].isdigit():
-                    params.update({'offset': int(flask.request.args['offset'])})
-                else:
-                    return error_handler()
-        else:
-            return error_handler()
-    # no offset without size allowed
-    elif 'offset' in flask.request.args:
-        return error_handler()
-    
-    wagers = db.get_wagers(**params)
+@use_args(wager_args)
+def wagers(args):
+    wagers = db.get_wagers(args['limit'], args['offset'])
     wagers_json = json.dumps(map(lambda x: x.to_dict(   ), wagers), indent=4)
     return flask.Response(wagers_json, status=200, mimetype='application/json')
 
