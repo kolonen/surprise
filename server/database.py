@@ -33,11 +33,12 @@ class database:
         self.connection.close()
         
     def save_wager(self, wager):
-        wager_id = self.__insert("INSERT INTO wager (wager_date, external_id, manager, system_size, stake, win_amount) VALUES (%s, %s, %s, %s, %s, %s)", 
+        wager_id = self.__insert("INSERT IGNORE INTO wager (wager_date, external_id, manager, system_size, stake, win_amount) VALUES (%s, %s, %s, %s, %s, %s)", 
                            (wager.wager_date, wager.ext_id, wager.manager, wager.system_size, wager.stake, wager.win_amount))
-        for e in wager.events:
-            self.__insert("INSERT INTO event(wager_id, choose_home, choose_tie, choose_away, home_team, away_team, away_score, home_score) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", 
-                          (wager_id, e.choose_home, e.choose_tie, e.choose_away, e.home_team, e.away_team,e.away_score, e.home_score))
+        if wager_id > 0:
+            for e in wager.events:
+                self.__insert("INSERT INTO event(wager_id, choose_home, choose_tie, choose_away, home_team, away_team, away_score, home_score) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", 
+                              (wager_id, e.choose_home, e.choose_tie, e.choose_away, e.home_team, e.away_team,e.away_score, e.home_score))
         
 
     def get_wagers(self, limit, offset):

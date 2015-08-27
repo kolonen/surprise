@@ -1,12 +1,10 @@
-import os, sys
-sys.path.append(os.path.abspath(os.path.join('..')))
-sys.path.append(os.path.abspath(os.path.join('.')))
+import sys
+sys.path.append("../server")
 import surprise
 import wager_client as wc
 import database
 import requests
 import json
-import sys
 import time
 
 
@@ -17,7 +15,7 @@ if __name__ == "__main__":
     for w in wagers:
         db.save_wager(w)
     
-    w = db.get_wagers("Mixu Paatelainen")[0]
+    w = db.get_wagers(50, 0)[0]
     print w.wager_id
     print w.wager_date
     for e in w.events:
