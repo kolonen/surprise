@@ -9,7 +9,8 @@ CREATE TABLE wager(
   system_size INT,
   stake INT,
   win_amount INT,
-  PRIMARY KEY (wager_id)         
+  PRIMARY KEY (wager_id),
+  UNIQUE (external_id)
 );
 
 CREATE TABLE event(
