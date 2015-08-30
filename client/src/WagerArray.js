@@ -7,7 +7,6 @@ var WagerArray = React.createClass ({
     },
     componentDidMount: function() {
 	$.get("http://localhost:80/surprise/wagers", function(r) {
-            console.log(this.wagerArrayToMap(r))
 	    this.setState({ wagers: r })
 	}.bind(this));
     },
