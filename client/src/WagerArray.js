@@ -1,3 +1,4 @@
+
 var WagerArray = React.createClass ({
     getInitialState: function() {
 	return {
@@ -6,36 +7,40 @@ var WagerArray = React.createClass ({
     },
     componentDidMount: function() {
 	$.get("http://localhost:80/surprise/wagers", function(r) {
-            this.setState({
-		wagers: r,
-            })
+            console.log(this.wagerArrayToMap(r))
+	    this.setState({ wagers: r })
 	}.bind(this));
     },
     render: function() {
-	return (
-		<div>	
-		{
-		    _.map(this.state.wagers, 
-		       function(w) {return <WagerAccordion wager_date={w.wager_date} ext_id={w.ext_id} win_amount ={w.win_amount} events={w.events}/>}
-		      )
-		}
-		</div>
-	)	
+	var wagerAccs = _.map(this.state.wagers, function(wager) {
+	    return <WagerAccordion wager_date={wager.wager_date} ext_id={wager.ext_id} win_amount ={wager.win_amount} events={wager.events}/>
+	})
+	return (<div>{wagerAccs}</div>)
     }
 })
 var WagerAccordion = React.createClass ({
+    getInitialState: function() {
+	return { 
+	    open: false
+	}
+    },
+    handleClick: function(e) {
+	if(this.state.open) 
+	    this.setState({open: false})
+	else 
+	    this.setState({open: true})
+    },
     render: function() {
-	return (<div class="wager">
-		<div>
-		  Date: {this.props.wager_date} Id: {this.props.ext_id} Win: {this.props.win_amount}
+	return (<div>
+		<div onClick={this.handleClick}>
+		  Date: {this.props.wager_date} Id: {this.props.ext_id} Win: {this.props.win_amount}  
 		</div>
-		<div >
-		  <EventTable events={this.props.events}/>
+		<div className={this.state.open ? "accordion" : "accordion hide"}>
+		<EventTable events={this.props.events}/>
 		</div>
 		</div>)
     }
 })
-
 
 var EventTable = React.createClass({
   render: function() {
@@ -73,4 +78,3 @@ var EventRow = React.createClass({
 
 
 React.render(<WagerArray/>, document.getElementById("surprise"))  
-
