@@ -1,43 +1,72 @@
+var Table = ReactBootstrap.Table
 
-var WagerArray = React.createClass ({
+
+var MainSurprise = React.createClass({
     getInitialState: function() {
 	return {
-	    wagers : []
+	    wagers : [],
+	    selected : 0
 	}
     },
-    componentDidMount: function() {
+    handleRowClick: function(key) {
+	this.setState({selected: key})
+    },
+    componentWillMount: function() {
 	$.get("http://localhost:80/surprise/wagers", function(r) {
 	    this.setState({ wagers: r })
 	}.bind(this));
     },
     render: function() {
-	var wagerAccs = _.map(this.state.wagers, function(wager) {
-	    return <WagerAccordion wager_date={wager.wager_date} ext_id={wager.ext_id} win_amount ={wager.win_amount} events={wager.events}/>
+	return (
+	<div className="container">
+  
+	  <div className="row">
+	    <div className="col-md-6">
+	      <WagerTable wagers={this.state.wagers} handleRowClick={this.handleRowClick}/>
+           </div>
+	   <div className="col-md-6">        
+	      <EventTable events={this.state.wagers[this.state.selected] != undefined ? this.state.wagers[this.state.selected].events : []}/>
+           </div>
+          </div>
+        </div>) 
+}
+})
+
+var WagerTable = React.createClass ({
+    render: function() {
+	console.log(this.props.wagers)
+	var handleClick = this.props.handleRowClick
+	var wagerRows = _.map(this.props.wagers, function(w, i) {
+	    return (<WagerRow handleRowClick={handleClick} wager_date={w.wager_date} ext_id={w.ext_id} system={w.system} hits={w.hits} win_amount={w.win_amount} index={i} key={i}/>)
 	})
-	return (<div>{wagerAccs}</div>)
+	return (
+	<Table striped>
+	    <thead>
+            <tr>
+            <th>Date</th>
+            <th>Id</th>
+            <th>System</th>
+            <th>Hits</th>
+            <th>Winning</th>
+            </tr>
+            </thead>
+            <tbody>{wagerRows}</tbody>
+	</Table>)
     }
 })
-var WagerAccordion = React.createClass ({
-    getInitialState: function() {
-	return { 
-	    open: false
-	}
-    },
-    handleClick: function(e) {
-	if(this.state.open) 
-	    this.setState({open: false})
-	else 
-	    this.setState({open: true})
+var WagerRow = React.createClass ({
+    handleClick: function () {
+	this.props.handleRowClick(this.props.index)
     },
     render: function() {
-	return (<div>
-		<div onClick={this.handleClick}>
-		  Date: {this.props.wager_date} Id: {this.props.ext_id} Win: {this.props.win_amount}  
-		</div>
-		<div className={this.state.open ? "accordion" : "accordion hide"}>
-		<EventTable events={this.props.events}/>
-		</div>
-		</div>)
+	console.log(this.props.kkey)
+	return (<tr onClick={this.handleClick}>
+		<td>{this.props.wager_date}</td>
+		<td>{this.props.ext_id}</td>
+		<td>{this.props.system}</td>
+		<td>{this.props.hits}</td>
+		<td>{this.props.win_amount}</td>
+	       </tr>)
     }
 })
 
@@ -46,7 +75,7 @@ var EventTable = React.createClass({
     var eventRows = _.map(this.props.events, function(e,i) {return <EventRow event={e} row_id={i+1}/>})
     console.log(eventRows)
     return (
-      <table>
+      <Table striped>
 	    <thead>
             <tr>
             <th>No.</th>
@@ -57,7 +86,7 @@ var EventTable = React.createClass({
             </tr>
             </thead>
             <tbody>{eventRows}</tbody>
-      </table>)
+      </Table>)
   }
 })
 
@@ -76,4 +105,4 @@ var EventRow = React.createClass({
 });
 
 
-React.render(<WagerArray/>, document.getElementById("surprise"))  
+React.render(<MainSurprise/>, document.getElementById("surprise"))  
