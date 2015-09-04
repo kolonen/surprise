@@ -19,10 +19,9 @@ var MainSurprise = React.createClass({
     render: function() {
 	return (
 	<div className="container">
-  
 	  <div className="row">
 	    <div className="col-md-6">
-	      <WagerTable wagers={this.state.wagers} handleRowClick={this.handleRowClick}/>
+	      <WagerTable wagers={this.state.wagers} handleRowClick={this.handleRowClick} selected={this.state.selected}/>
            </div>
 	   <div className="col-md-6">        
 	      <EventTable events={this.state.wagers[this.state.selected] != undefined ? this.state.wagers[this.state.selected].events : []}/>
@@ -33,14 +32,14 @@ var MainSurprise = React.createClass({
 })
 
 var WagerTable = React.createClass ({
-    render: function() {
-	console.log(this.props.wagers)
-	var handleClick = this.props.handleRowClick
-	var wagerRows = _.map(this.props.wagers, function(w, i) {
-	    return (<WagerRow handleRowClick={handleClick} wager_date={w.wager_date} ext_id={w.ext_id} system={w.system} hits={w.hits} win_amount={w.win_amount} index={i} key={i}/>)
-	})
+    render: function() {	
+	var wagerRows = _.map(this.props.wagers, function(w, i) {    
+	    return (<WagerRow handleRowClick={this.props.handleRowClick} selected = {this.props.selected==i ? true : false} 
+		    wager_date={w.wager_date} ext_id={w.ext_id} system={w.system} hits={w.hits} win_amount={w.win_amount} index={i} key={i}/>)
+	}.bind(this))
+	
 	return (
-	<Table striped>
+	<Table>
 	    <thead>
             <tr>
             <th>Date</th>
@@ -59,8 +58,7 @@ var WagerRow = React.createClass ({
 	this.props.handleRowClick(this.props.index)
     },
     render: function() {
-	console.log(this.props.kkey)
-	return (<tr onClick={this.handleClick}>
+	return (<tr onClick={this.handleClick} className={this.props.selected ? "bg-primary" : ""}>
 		<td>{this.props.wager_date}</td>
 		<td>{this.props.ext_id}</td>
 		<td>{this.props.system}</td>
@@ -73,7 +71,6 @@ var WagerRow = React.createClass ({
 var EventTable = React.createClass({
   render: function() {
     var eventRows = _.map(this.props.events, function(e,i) {return <EventRow event={e} row_id={i+1}/>})
-    console.log(eventRows)
     return (
       <Table striped>
 	    <thead>
