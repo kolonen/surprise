@@ -38,7 +38,8 @@ class wager(object):
                  system_size=1,
                  stake=None,
                  win_amount=None,
-                 events=None):
+                 events=None,
+                 hits=0):
         
         self.wager_id = wager_id
         self.ext_id = ext_id
@@ -48,7 +49,7 @@ class wager(object):
         self.stake = stake
         self.win_amount = win_amount
         self.events = events
-        
+        self.hits = hits
     
     def to_dict(self):
         d = copy.deepcopy(self.__dict__)

@@ -44,6 +44,7 @@ class database:
     def get_wagers(self, limit, offset):
     
         def wager_from_row(r):
+            events = self.get_events(r['wager_id'])
             return surprise.wager(wager_id = r['wager_id'],
                   wager_date = r['wager_date'], 
                   ext_id = r['external_id'],
@@ -51,7 +52,8 @@ class database:
                   system_size = r['system_size'],
                   manager = r['manager'],
                   win_amount = r['win_amount'],
-                  events = self.get_events(r['wager_id']))
+                  events = events,
+                  hits = self.get_hits(events))
         
         query = "SELECT wager_id, external_id, wager_date, manager, system_size, stake, win_amount FROM wager LIMIT %s OFFSET %s"
         rows = self.__query(query, (limit, offset))
@@ -78,3 +80,16 @@ class database:
         
     def update_event_author(self, author, event_id):
         return self.__insert("UPDATE event SET author=%s WHERE event_id=%s", (author, event_id))
+        
+    def get_hits(self, events):
+        def is_hit(event):
+            return True if ((event.home_score > event.away_score and event.choose_home)
+                or (event.home_score < event.away_score and event.choose_away)
+                or (event.home_score == event.away_score and event.choose_tie)
+                ) else False
+        
+        hits = 0
+        for e in events:
+            if is_hit(e):
+                hits +=1
+        return hits
