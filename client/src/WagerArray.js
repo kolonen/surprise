@@ -1,5 +1,5 @@
 var Table = ReactBootstrap.Table
-
+var PageHeader = ReactBootstrap.PageHeader
 
 var MainSurprise = React.createClass({
     getInitialState: function() {
@@ -19,7 +19,8 @@ var MainSurprise = React.createClass({
     render: function() {
 	return (
 	<div className="container">
-	  <div className="row">
+	<PageHeader>Wagers</PageHeader>  
+	<div className="row">
 	    <div className="col-md-6">
 	      <WagerTable wagers={this.state.wagers} handleRowClick={this.handleRowClick} selected={this.state.selected}/>
            </div>
