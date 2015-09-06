@@ -1,5 +1,6 @@
 var Table = ReactBootstrap.Table
 var PageHeader = ReactBootstrap.PageHeader
+var Navbar = ReactBootstrap.Navbar
 
 var MainSurprise = React.createClass({
     getInitialState: function() {
@@ -19,7 +20,7 @@ var MainSurprise = React.createClass({
     render: function() {
 	return (
     <div>
-    <ReactBootstrap.Navbar brand="Surprise"></ReactBootstrap.Navbar>
+    <Navbar brand="Surprise"></Navbar>
 	<div className="container">
 	<PageHeader>Wagers</PageHeader>  
 	<div className="row">
