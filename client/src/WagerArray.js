@@ -1,5 +1,6 @@
 var Table = ReactBootstrap.Table
 var PageHeader = ReactBootstrap.PageHeader
+var Navbar = ReactBootstrap.Navbar
 
 var MainSurprise = React.createClass({
     getInitialState: function() {
@@ -18,6 +19,8 @@ var MainSurprise = React.createClass({
     },
     render: function() {
 	return (
+    <div>
+    <Navbar brand="Surprise"></Navbar>
 	<div className="container">
 	<PageHeader>Wagers</PageHeader>  
 	<div className="row">
@@ -28,7 +31,8 @@ var MainSurprise = React.createClass({
 	      <EventTable events={this.state.wagers[this.state.selected] != undefined ? this.state.wagers[this.state.selected].events : []}/>
            </div>
           </div>
-        </div>) 
+        </div> 
+    </div>)
 }
 })
 
