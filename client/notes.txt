@@ -1,0 +1,7 @@
+npm install -g browserify
+npm install --save-dev babelify
+
+npm install -g watchify
+
+browserify -t babelify src/main.js -o src/bundle.js --debug
+
