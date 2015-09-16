@@ -1,2 +1,4 @@
 *.pyc
 nbproject
+node_modules
+bundle.js
