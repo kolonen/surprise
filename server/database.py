@@ -23,9 +23,9 @@ class database:
             self.connection.rollback()
         return self.cursor.lastrowid
 
-    def __query(self, query, data):
+    def __query(self, query, data=None):
         cursor = self.connection.cursor( MySQLdb.cursors.DictCursor )
-        
+        #print query
         cursor.execute(query, data) if data is not None else cursor.execute(query)
         return cursor.fetchall()
 
@@ -78,9 +78,14 @@ class database:
         rows = self.__query("SELECT event_id, wager_id, choose_home, choose_tie, choose_away, home_team, away_team, away_score, home_score, author FROM event WHERE wager_id = %s", [wager_id])
         return map(lambda r: event_from_row(r), rows)
         
-    def update_event_author(self, author, event_id):
+    def update_event_author(self, event_id, author):
         return self.__insert("UPDATE event SET author=%s WHERE event_id=%s", (author, event_id))
         
+    def get_authors(self):
+        rows = self.__query("SELECT username FROM user")
+        print rows
+        return rows
+
     def get_hits(self, events):
         def is_hit(event):
             return True if ((event.home_score > event.away_score and event.choose_home)

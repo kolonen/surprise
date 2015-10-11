@@ -84,7 +84,6 @@ def parse_wager(w):
                           ext_id=external_id,
                           stake=stake, 
                           system_size=system_size,
-                          manager = "Mixu Paatelainen",
                           win_amount = win_amount,
                           events=events)
     
