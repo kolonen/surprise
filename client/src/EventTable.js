@@ -9,15 +9,15 @@ var EventRow = require('./EventRow.js')
 module.exports = React.createClass({
   getInitialState: function() {
       return {
-	  eventAuthors : toEventAuthors(this.props.events),
+	  eventAuthors : this.toEventAuthors(this.props.events),
 	  updated : false
       }
   },
   toEventAuthors: function(events) { 
       return _.map(events, function(event) { return { "eventId": event.event_id, "author": event.author }})
   },    
-  componentWillReceiveProps: function() {
-      this.setState( {eventAuthors : toEventAuthors(props.events), updated : false} )
+  componentWillReceiveProps: function(props) {
+      this.setState( {eventAuthors : this.toEventAuthors(props.events), updated : false} )
   },
   setEventAuthor: function(i, eventAuthor) {
       var originalAuthors = _.map(this.props.events, function(event) { return event.author })
