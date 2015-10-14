@@ -26,7 +26,6 @@ module.exports = React.createClass({
 	
 	$.get("http://localhost:80/surprise/authors", function(r) {
 	    var authors = _.map(r, function(a) {return a.username})
-	    
 	    this.setState({ availableAuthors: authors })
 	}.bind(this))
     },
