@@ -2,7 +2,7 @@ var React = require('react')
 
 module.exports = React.createClass ({
     handleClick: function () {
-	this.props.handleRowClick(this.props.index)
+	this.props.handleClick(this.props.index)
     },
     render: function() {
 	return (<tr onClick={this.handleClick} className={this.props.selected ? "bg-primary" : ""}>
