@@ -62,7 +62,7 @@ def parse_wager(w):
     rows = dict(map(lambda r: (int(r['id']), r), w['draw']['rows']))
 
     def getScore(d,k):
-        if 'score' in d:return d['result']['score'][k]
+        if 'score' in d:return d['score'][k]
 
     events = map(lambda (i,s):
                 surprise.event(
@@ -72,8 +72,8 @@ def parse_wager(w):
                      choose_away=s['away'],
                      home_team=rows[i]['outcome']['home']['name'],
                      away_team=rows[i]['outcome']['away']['name'],
-                     home_score=getScore(rows[i],'home'),
-                     away_score=getScore(rows[i],'away')
+                     home_score=getScore(rows[i]['result'],'home'),
+                     away_score=getScore(rows[i]['result'],'away')
                  ), selections)
 
     #parse wager high level data, create wager
