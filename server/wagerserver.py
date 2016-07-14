@@ -3,7 +3,7 @@ from database import database
 import json
 from webargs import fields
 from webargs.flaskparser import use_args
-
+import wager_client as wc
 
 app = flask.Flask(__name__)
 db = database()
@@ -37,6 +37,15 @@ def wager_authors():
     print authors
     for a in authors:
         db.update_event_author(a['eventId'], a['author'])
+    return flask.Response({'success'}, status=200, mimetype='application/json')
+
+@app.route("/refresh", methods=['POST'])
+def refresh():
+    credentials = flask.request.get_json(force=True)
+    s = wc.login(credentials['username'], credentials['password'])
+    wagers = wc.get_wagers(s)
+    for w in wagers:
+        db.save_wager(w)
     return flask.Response({'success'}, status=200, mimetype='application/json')
 
 @app.errorhandler(404)
