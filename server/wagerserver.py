@@ -1,7 +1,7 @@
 import flask
 from database import database
 import json
-from webargs import Arg
+from webargs import fields
 from webargs.flaskparser import use_args
 
 
@@ -9,8 +9,8 @@ app = flask.Flask(__name__)
 db = database()
 
 wager_args = {
-  'limit': Arg(int, default=10000),
-  'offset': Arg(int, default=0)
+  'limit': fields.Int(missing=10000),
+  'offset': fields.Int(missing=0)
 }
 
 @app.route("/wagers", methods=['GET'])
@@ -27,8 +27,8 @@ def authors():
     return flask.Response(authors_json, status=200, mimetype='application/json')
 
 wager_authors_args = {
-    'eventId': Arg(int),
-    'author': Arg(str)
+    'eventId': fields.Int(),
+    'author': fields.Str()
 }
 
 @app.route("/wager/authors", methods=['POST'])
@@ -38,11 +38,11 @@ def wager_authors():
     for a in authors:
         db.update_event_author(a['eventId'], a['author'])
     return flask.Response({'success'}, status=200, mimetype='application/json')
-    
+
 @app.errorhandler(404)
 def error_handler():
-    message = {'Error: ' + flask.request.url}   
+    message = {'Error: ' + flask.request.url}
     return flask.Response(message, status=404, mimetype='application/json')
-        
+
 if __name__ == "__main__":
     app.run(debug=True)
