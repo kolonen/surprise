@@ -4,13 +4,13 @@ var RB = require('react-bootstrap')
 var $ = require('jquery')
 
 module.exports = React.createClass({
-  refreshData: function() {
-    var name = ReactDOM.findDOMNode(this.refs.userName).value;
-    var passwd = ReactDOM.findDOMNode(this.refs.passWord).value;
-    var credentials = { username: name , password: passwd }
+  LoadWagers: function() {
+    var username = ReactDOM.findDOMNode(this.refs.userName).value;
+    var password = ReactDOM.findDOMNode(this.refs.passWord).value;
+    var credentials = { username: username , password: password }
     $.ajax({
       type: "POST",
-      url: "http://localhost:80/surprise/refresh",
+      url: "http://localhost:80/surprise/loadwagers",
       data:  JSON.stringify(credentials),
       contentType: "application/json; charset=utf-8",
       success: function(r) { console.log(r) }
@@ -26,7 +26,7 @@ module.exports = React.createClass({
           <RB.FormControl type="password" placeholder="Password..." ref = 'passWord' />
         </RB.FormGroup>
         {' '}{' '}
-        <RB.Button type="button" onClick = {this.refreshData} >
+        <RB.Button type="button" onClick = {this.LoadWagers} >
           Go!
         </RB.Button>
       </RB.Navbar.Form>

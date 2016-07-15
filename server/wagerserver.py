@@ -39,8 +39,8 @@ def wager_authors():
         db.update_event_author(a['eventId'], a['author'])
     return flask.Response({'success'}, status=200, mimetype='application/json')
 
-@app.route("/refresh", methods=['POST'])
-def refresh():
+@app.route("/loadwagers", methods=['POST'])
+def LoadWagers():
     credentials = flask.request.get_json(force=True)
     s = wc.login(credentials['username'], credentials['password'])
     wagers = wc.get_wagers(s)

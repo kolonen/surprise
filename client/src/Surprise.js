@@ -6,7 +6,7 @@ var _ = require('lodash')
 
 var WagerTable = require('./WagerTable.js')
 var EventTable = require('./EventTable.js')
-var RefreshForm = require('./RefreshForm.js')
+var LoadWagers = require('./LoadWagers.js')
 
 module.exports = React.createClass({
     getInitialState: function() {
@@ -37,7 +37,7 @@ module.exports = React.createClass({
 	return (
     <div>
         <Navbar brand="Surprise">
-        <RefreshForm/>
+        <LoadWagers/>
         </Navbar>
 	<div className="container">
 	<PageHeader>Wagers</PageHeader>
