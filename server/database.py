@@ -1,7 +1,6 @@
 import MySQLdb
 import sys
 import surprise
-from datetime import datetime
 
 class database:
 
