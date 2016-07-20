@@ -13,8 +13,11 @@ module.exports = React.createClass({
       url: "http://localhost:80/surprise/loadwagers",
       data:  JSON.stringify(credentials),
       contentType: "application/json; charset=utf-8",
-      success: function(r) { console.log(r) }
-      })
+      success: function(r) {
+        console.log(r.loadedwagers);
+        alert("Nrof loaded wagers: "+r.loadedwagers)
+      }
+    })
   },
   render: function() {
     return (
