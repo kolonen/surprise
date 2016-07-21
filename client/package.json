@@ -8,11 +8,13 @@
     "react-dom": "~15.2.1",
     "jquery": "~3.1.0",
     "react-bootstrap": "~0.29.5",
-    "lodash": "~4.13.1"
+    "lodash": "~4.13.1",
+    "axios": "~0.13.1"
   },
   "devDependencies": {
     "babelify": "~7.3.0",
-    "babel-preset-react": "~6.11.1"
+    "babel-preset-react": "~6.11.1",
+    "babel-preset-es2015": "~6.9.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

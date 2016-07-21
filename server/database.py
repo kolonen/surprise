@@ -1,7 +1,6 @@
 import MySQLdb
 import sys
 import surprise
-from datetime import datetime
 
 class database:
 
@@ -83,18 +82,12 @@ class database:
 
     def get_authors(self):
         rows = self.__query("SELECT username FROM user")
-        print rows
         return rows
 
-    def get_hits(self, events):
+    def get_hits(self,events):
         def is_hit(event):
-            return True if ((event.home_score > event.away_score and event.choose_home)
+            return ((event.home_score > event.away_score and event.choose_home)
                 or (event.home_score < event.away_score and event.choose_away)
-                or (event.home_score == event.away_score and event.choose_tie)
-                ) else False
-
-        hits = 0
-        for e in events:
-            if is_hit(e):
-                hits +=1
-        return hits
+                or (event.home_score == event.away_score and event.choose_tie))
+                
+        return len(filter(lambda x : is_hit(x), events))
