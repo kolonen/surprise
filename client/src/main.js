@@ -1,5 +1,4 @@
-var React = require('react')
-var Surprise = require('./Surprise.js')
-var ReactDom = require('react-dom');
+const Surprise = require('./Surprise.js')
+const ReactDom = require('react-dom');
 
 ReactDom.render(<Surprise/>, document.getElementById("surprise"))

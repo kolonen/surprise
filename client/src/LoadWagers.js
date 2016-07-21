@@ -1,13 +1,13 @@
-var React = require('react')
-var ReactDOM = require("react-dom");
-var RB = require('react-bootstrap')
-var $ = require('jquery')
+const React = require('react')
+const ReactDOM = require("react-dom");
+const RB = require('react-bootstrap')
+const $ = require('jquery')
 
 module.exports = React.createClass({
   loadWagers: function() {
-    var username = ReactDOM.findDOMNode(this.refs.userName).value;
-    var password = ReactDOM.findDOMNode(this.refs.passWord).value;
-    var credentials = { username: username , password: password }
+    const username = ReactDOM.findDOMNode(this.refs.userName).value;
+    const password = ReactDOM.findDOMNode(this.refs.passWord).value;
+    const credentials = { username: username , password: password }
     $.ajax({
       type: "POST",
       url: "http://localhost:80/surprise/loadwagers",
