@@ -30,42 +30,42 @@ class database:
 
     def __del__(self):
         self.connection.close()
-        
+
     def save_wager(self, wager):
-        wager_id = self.__insert("INSERT IGNORE INTO wager (wager_date, external_id, manager, system_size, stake, win_amount) VALUES (%s, %s, %s, %s, %s, %s)", 
+        wager_id = self.__insert("INSERT IGNORE INTO wager (wager_date, external_id, manager, system_size, stake, win_amount) VALUES (%s, %s, %s, %s, %s, %s)",
                            (wager.wager_date, wager.ext_id, wager.manager, wager.system_size, wager.stake, wager.win_amount))
         if wager_id > 0:
             for e in wager.events:
-                self.__insert("INSERT INTO event(wager_id, choose_home, choose_tie, choose_away, home_team, away_team, away_score, home_score) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", 
+                self.__insert("INSERT INTO event(wager_id, choose_home, choose_tie, choose_away, home_team, away_team, away_score, home_score) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
                               (wager_id, e.choose_home, e.choose_tie, e.choose_away, e.home_team, e.away_team,e.away_score, e.home_score))
-        
-
+        return wager_id
+                              
     def get_wagers(self, limit, offset):
-    
+
         def wager_from_row(r):
             events = self.get_events(r['wager_id'])
             return surprise.wager(wager_id = r['wager_id'],
-                  wager_date = r['wager_date'], 
+                  wager_date = r['wager_date'],
                   ext_id = r['external_id'],
-                  stake = r['stake'], 
+                  stake = r['stake'],
                   system_size = r['system_size'],
                   manager = r['manager'],
                   win_amount = r['win_amount'],
                   events = events,
                   hits = self.get_hits(events))
-        
+
         query = "SELECT wager_id, external_id, wager_date, manager, system_size, stake, win_amount FROM wager LIMIT %s OFFSET %s"
         rows = self.__query(query, (limit, offset))
         wagers = map(lambda x: wager_from_row(x), rows)
         return wagers
 
-    
+
     def get_events(self, wager_id):
-        
+
         def event_from_row(r):
             return surprise.event(event_id = r['event_id'],
                            wager_id = r['wager_id'],
-                           choose_home = r['choose_home'], 
+                           choose_home = r['choose_home'],
                            choose_tie = r['choose_tie'],
                            choose_away = r['choose_away'],
                            home_team = r['home_team'],
@@ -73,13 +73,13 @@ class database:
                            home_score = r['home_score'],
                            away_score = r['away_score'],
                            author = r['author'])
-        
+
         rows = self.__query("SELECT event_id, wager_id, choose_home, choose_tie, choose_away, home_team, away_team, away_score, home_score, author FROM event WHERE wager_id = %s", [wager_id])
         return map(lambda r: event_from_row(r), rows)
-        
+
     def update_event_author(self, event_id, author):
         return self.__insert("UPDATE event SET author=%s WHERE event_id=%s", (author, event_id))
-        
+
     def get_authors(self):
         rows = self.__query("SELECT username FROM user")
         return rows
