@@ -43,11 +43,11 @@ def load_wagers():
     credentials = flask.request.get_json(force=True)
     s = wc.login(credentials['username'], credentials['password'])
     wagers = wc.get_wagers(s)
-    nrof_loaded = 0
+    saved = 0
     for w in wagers:
         if db.save_wager(w) > 0:
-            nrof_loaded += 1
-    message_json = json.dumps({'loadedwagers' : str(nrof_loaded)}, indent=4)
+            saved += 1
+    message_json = json.dumps({'loadedWagers' : str(len(wagers)), 'savedWagers': str(saved)}, indent=4)
     return flask.Response(message_json, status=200, mimetype='application/json')
 
 @app.errorhandler(404)

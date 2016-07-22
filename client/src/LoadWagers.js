@@ -12,8 +12,8 @@ module.exports = React.createClass({
     http.
       post("http://localhost:80/surprise/loadwagers", JSON.stringify(credentials)).
       then(r => {
-        console.log(r.loadedwagers)
-        alert("Nrof loaded wagers: "+r.loadedwagers)
+        console.log("Got "+r.data.loadedWagers+" wagers. Saved "+r.data.savedWagers +" new ones.")
+        alert("Got "+r.data.loadedWagers+" wagers. \nSaved "+r.data.savedWagers +" new ones.")
       })
   },
   render: function() {

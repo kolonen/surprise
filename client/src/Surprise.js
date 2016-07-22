@@ -49,10 +49,10 @@ module.exports = React.createClass({
                 </div>
                 <div className="col-md-6">
                   <EventTable events = {this.getSelectedEvents()} availableAuthors = {this.state.availableAuthors}/>
-                </div> //col-md-6
-              </div> //row
-            </div>  //container
-      </div> //div
+                </div>
+              </div>
+            </div>
+      </div>
     )
   }
 })
