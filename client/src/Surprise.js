@@ -21,6 +21,9 @@ module.exports = React.createClass({
     this.setState({selected: key})
   },
   componentDidMount: function() {
+    this.reloadData()
+  },
+  reloadData: function() {
     Promise.all([
       http.get("http://localhost:80/surprise/wagers"),
       http.get("http://localhost:80/surprise/authors")
@@ -39,7 +42,7 @@ module.exports = React.createClass({
     return (
       <div>
         <Navbar brand="Surprise">
-          <LoadWagers/>
+          <LoadWagers reload={this.reloadData} />
         </Navbar>
         <div className="container">
           <PageHeader>Wagers</PageHeader>

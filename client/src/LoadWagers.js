@@ -14,6 +14,7 @@ module.exports = React.createClass({
       then(r => {
         console.log("Got "+r.data.loadedWagers+" wagers. Saved "+r.data.savedWagers +" new ones.")
         alert("Got "+r.data.loadedWagers+" wagers. \nSaved "+r.data.savedWagers +" new ones.")
+        this.props.reload()
       })
   },
   render: function() {
