@@ -1,4 +1,4 @@
 
 module.exports = {
-    baseUrl: 'https://localhost'
+    baseUrl: 'https://localhost:4500'
 }
