@@ -9,6 +9,8 @@ const EventTable = require('./EventTable.js')
 const LoadWagers = require('./LoadWagers.js')
 const http = require('axios')
 
+const baseUrl = require('./Config.js').baseUrl
+
 module.exports = React.createClass({
   getInitialState: function() {
     return {
@@ -25,8 +27,8 @@ module.exports = React.createClass({
   },
   reloadData: function() {
     Promise.all([
-      http.get("http://localhost:80/surprise/wagers"),
-      http.get("http://localhost:80/surprise/authors")
+      http.get(baseUrl + "/surprise/wagers"),
+      http.get(baseUrl + "/surprise/authors")
     ])
     .then(r => this.setState(
       {
