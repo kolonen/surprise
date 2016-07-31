@@ -5,6 +5,8 @@ const Button = require('react-bootstrap').Button
 const EventRow = require('./EventRow.js')
 const http = require('axios')
 
+const baseUrl = require('./Config.js').baseUrl
+
 module.exports = React.createClass({
   getInitialState: function() {
     return {
@@ -27,7 +29,7 @@ module.exports = React.createClass({
   saveAuthors: function() {
     const authorsToSave = this.state.eventAuthors.filter(a => a.author != null)
     http
-      .post('http://localhost:80/surprise/wager/authors', JSON.stringify(authorsToSave))
+      .post(baseUrl + '/surprise/wager/authors', JSON.stringify(authorsToSave))
       .then(r => console.log(r.status))
   },
   render: function() {

@@ -3,6 +3,8 @@ const ReactDOM = require("react-dom");
 const RB = require('react-bootstrap')
 const http = require('axios')
 
+const baseUrl = require('./Config.js').baseUrl
+
 module.exports = React.createClass({
   loadWagers: function() {
     const username = ReactDOM.findDOMNode(this.refs.userName).value;
@@ -10,7 +12,7 @@ module.exports = React.createClass({
     const credentials = { username: username , password: password }
 
     http.
-      post("http://localhost:80/surprise/loadwagers", JSON.stringify(credentials)).
+      post(baseUrl + "/surprise/loadwagers", JSON.stringify(credentials)).
       then(r => {
         console.log("Got "+r.data.loadedWagers+" wagers. Saved "+r.data.savedWagers +" new ones.")
         alert("Got "+r.data.loadedWagers+" wagers. \nSaved "+r.data.savedWagers +" new ones.")
