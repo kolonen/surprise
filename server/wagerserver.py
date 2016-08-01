@@ -45,6 +45,7 @@ def load_wagers():
     wagers = wc.get_wagers(s)
     saved = 0
     for w in wagers:
+        w.manager = credentials['username']
         if db.save_wager(w) > 0:
             saved += 1
     message_json = json.dumps({'loadedWagers' : str(len(wagers)), 'savedWagers': str(saved)}, indent=4)
