@@ -30,7 +30,10 @@ module.exports = React.createClass({
     const authorsToSave = this.state.eventAuthors.filter(a => a.author != null)
     http
       .post(baseUrl + '/surprise/wager/authors', JSON.stringify(authorsToSave))
-      .then(r => console.log(r.status))
+      .then(r => {
+        console.log(r.status)
+        this.props.reload()
+      })
   },
   render: function() {
     const eventRows = this.props.events.map((e, i) =>

@@ -53,7 +53,7 @@ module.exports = React.createClass({
                 <WagerTable wagers = {this.state.wagers} handleClick = {this.handleRowClick} selected = {this.state.selected}/>
                 </div>
                 <div className="col-md-6">
-                  <EventTable events = {this.getSelectedEvents()} availableAuthors = {this.state.availableAuthors}/>
+                  <EventTable events = {this.getSelectedEvents()} availableAuthors = {this.state.availableAuthors} reload={this.reloadData} />
                 </div>
               </div>
             </div>
