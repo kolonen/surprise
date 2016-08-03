@@ -14,6 +14,7 @@ module.exports = React.createClass ({
       system={w.system}
       hits={w.hits}
       win_amount={w.win_amount}
+      manager={w.manager}
       index={i}
       key={i}
       />
@@ -27,6 +28,7 @@ module.exports = React.createClass ({
               <th>System</th>
               <th>Hits</th>
               <th>Winning</th>
+              <th>Manager</th>
             </tr>
           </thead>
           <tbody>{wagerRows}</tbody>

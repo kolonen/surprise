@@ -12,6 +12,7 @@ module.exports = React.createClass ({
         <td>{this.props.system}</td>
         <td>{this.props.hits}</td>
         <td>{this.props.win_amount}</td>
+        <td>{this.props.manager}</td>
       </tr>)
   }
 })
