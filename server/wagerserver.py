@@ -55,4 +55,4 @@ def error_handler():
     return flask.Response(response = 'Error:  + flask.request.url', status=404, mimetype='application/json')
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)
